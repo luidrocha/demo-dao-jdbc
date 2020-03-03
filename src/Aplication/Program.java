@@ -36,6 +36,17 @@ public class Program {
 		}
 		
 		
+		System.out.println(" \n\n =============== TESTE 2: Seller FindAll =================");
+		
+		List<Seller> listf = sellerDao.findAll();
+		
+		for (Seller sell : listf) {
+			
+			System.out.println(sell);
+		}
+		
+		
+		
 		
 		
 	}
