@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,14 +30,44 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void insert(Seller obj) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void update(Seller obj) {
-		// TODO Auto-generated method stub
 
+		PreparedStatement st = null;
+
+		try {
+
+			if (conn != null) {
+
+				st = conn.prepareStatement("UPDATE Seller SET Name=?, Email=?, "
+						+ "BirthDate=?, BaseSalary=?, DepartmentID=? " 
+						+ " WHERE id = ?");
+
+				st.setString(1, obj.getName());
+				st.setString(2, obj.getEmail());
+				st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+				st.setDouble(4, obj.getBaseSalary());
+				st.setInt(5, obj.getDepartment().getId());
+				st.setInt(6, obj.getId());
+
+				st.executeUpdate();
+
+			}
+
+		} catch (SQLException e) {
+
+			throw new DbException(e.getMessage());
+		}
+
+		finally {
+
+			System.out.println(" Atualizado com sucesso !!!");
+
+			DB.closeStatemant(st);
+		}
 	}
 
 	@Override
@@ -128,25 +157,26 @@ public class SellerDaoJDBC implements SellerDao {
 			if (conn != null) {
 
 				st = conn.prepareStatement("SELECT Seller.*, Department.Name as DepName "
-						+ " FROM Seller INNER JOIN Department ON  Seller.DepartmentId= Department.Id ORDER BY NAME");
+						+ " FROM Seller INNER JOIN Department ON Seller.DepartmentId= Department.Id ORDER BY NAME");
 
 				rs = st.executeQuery();
-				
+
 				Map<Integer, Department> map = new HashMap<>();
 				List<Seller> seller = new ArrayList<>();
-				
+
 				Department dep = new Department();
-				
+
 				while (rs.next()) {
 
-					dep=map.get(rs.getInt("DepartmentId"));
+					dep = map.get(rs.getInt("DepartmentId"));
 
-					if (dep==null) {
-						
-					 dep = IntantiateDep(rs);
-				}
+					if (dep == null) {
+
+						dep = IntantiateDep(rs);
+						map.put(rs.getInt("DepartmentId"), dep);
+					}
 					Seller obj = InstantiateSeller(rs, dep);
-					map.put(rs.getInt("DepartmentId"), dep);
+
 					seller.add(obj);
 
 				}
@@ -189,10 +219,8 @@ public class SellerDaoJDBC implements SellerDao {
 				rs = st.executeQuery();
 
 				Map<Integer, Department> map = new HashMap<>();
-				
-				List<Seller> lista = new ArrayList<>();
 
-				
+				List<Seller> lista = new ArrayList<>();
 
 				while (rs.next()) {
 
