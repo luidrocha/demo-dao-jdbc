@@ -45,11 +45,22 @@ public class Program {
 
 		System.out.println(" \n\n =============== TESTE 5 : Seller Update =================");
 
-		seller = sellerDao.findById(3);
+		seller = sellerDao.findById(11);
 		
 		seller.setName("Joana Killer");
 	
 		sellerDao.update(seller);
+		
+		System.out.println(" \n\n =============== TESTE 6 : Seller Delete =================");
+
+		
+		sellerDao.deleteById(11);
+		
+		System.out.println(" Eliminado !");
+
+		
+		
+		
 	}
 
 }
