@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,50 @@ public class SellerDaoJDBC implements SellerDao {
 	@Override
 	public void insert(Seller obj) {
 
+		PreparedStatement st = null;
+
+		try {
+
+			st = conn.prepareStatement(
+					"INSERT INTO Seller (Name, Email, BirthDate, BaseSalary, DepartmentId)"
+					+ " VALUES  (?, ?, ?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
+
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+			st.setDouble(4, obj.getBaseSalary());
+			st.setInt(5, obj.getDepartment().getId());
+
+			int linhasAfetadas = st.executeUpdate();
+
+			if (linhasAfetadas > 0) {
+
+				ResultSet rs = st.getGeneratedKeys();
+
+				while (rs.next()) {
+
+					int id = rs.getInt(1);
+
+					obj.setId(id);
+				}
+				
+				DB.closeResultSet(rs);
+
+			} else {
+
+				throw new DbException(" Erro inesperado ! nenhuma linha afetada ! ");
+
+			}
+		} catch (SQLException e) {
+
+			throw new DbException(e.getMessage());
+		} finally {
+
+			DB.closeStatemant(st);
+
+		}
+
 	}
 
 	@Override
@@ -43,8 +88,7 @@ public class SellerDaoJDBC implements SellerDao {
 			if (conn != null) {
 
 				st = conn.prepareStatement("UPDATE Seller SET Name=?, Email=?, "
-						+ "BirthDate=?, BaseSalary=?, DepartmentID=? " 
-						+ " WHERE id = ?");
+						+ "BirthDate=?, BaseSalary=?, DepartmentID=? " + " WHERE id = ?");
 
 				st.setString(1, obj.getName());
 				st.setString(2, obj.getEmail());
@@ -72,27 +116,26 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		
+
 		PreparedStatement st = null;
-		
+
 		try {
-			
+
 			st = conn.prepareStatement("DELETE FROM seller WHERE id=?");
-			
-			st.setInt(1,id);
-			
+
+			st.setInt(1, id);
+
 			st.executeUpdate();
-			
-						
+
 		}
-		
+
 		catch (SQLException e) {
-			
-			throw new DbException (e.getMessage());
+
+			throw new DbException(e.getMessage());
 		}
-		
+
 		finally {
-			
+
 			DB.closeStatemant(st);
 		}
 

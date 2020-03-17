@@ -1,6 +1,7 @@
 package Aplication;
 
 import java.util.List;
+import java.util.Date;
 
 import demo.dao.DaoFactory;
 import demo.dao.SellerDao;
@@ -22,7 +23,7 @@ public class Program {
 
 		System.out.println(" \n=============== TESTE 2: Seller FindByDepatmet =================");
 
-		Department department = new Department(2, null);
+		Department department = new Department(3, null);
 
 		List<Seller> lista = sellerDao.findDepartment(department);
 
@@ -42,6 +43,12 @@ public class Program {
 		}
 
 		System.out.println(" \n\n =============== TESTE 4: Seller Insert =================");
+		
+		Seller newSeller = new Seller(null, "Jhon Rambo", "Rambo@gmail.com", new Date(),  department, 2500.0 );
+		sellerDao.insert(newSeller);
+		System.out.println("Id criado " + newSeller.getId());
+		
+		
 
 		System.out.println(" \n\n =============== TESTE 5 : Seller Update =================");
 
