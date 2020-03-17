@@ -97,9 +97,39 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		//
+		
+		PreparedStatement st = null;
+
+		try {
+
+			st = conn.prepareStatement("DELETE FROM Department WHERE id = ?");
+
+			st.setInt(1, id);
+
+			int linhasAfetadas = st.executeUpdate();
+
+			if (linhasAfetadas > 0) {
+
+				System.out.println(" Registros afetados: " + linhasAfetadas);
+				System.out.println("Departamento Eliminado: " + id );
+
+			} else {System.out.println("Nenhuma linha atualizada !");
+			
+				System.out.println("Departamento Inexistente: " + id);
+			}
+		}
+
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+
+		} finally {
+			DB.closeStatemant(st);
+		}
 
 	}
+
+	
 
 	@Override
 	public Department findById(Integer id) {

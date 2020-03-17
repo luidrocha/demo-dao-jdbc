@@ -24,7 +24,9 @@ public class Program2 {
 		
 		departmentDao.update(dep);
 		
+		System.out.println("/n/n============== Department Delete ==========/n/n");
 		
+		departmentDao.deleteById(14);
 
 	}
 
