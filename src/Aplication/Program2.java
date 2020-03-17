@@ -12,13 +12,18 @@ public class Program2 {
 
 		DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 		
-		Department dep = new Department(null, "DBA");
+		Department dep = new Department(8, "Eletrica");
+//		
+//		departmentDao.insert(dep);
+//		
+//		System.out.println("============== Department Insert ==========");
 		
-		departmentDao.insert(dep);
+	//	System.out.println(dep.getId());
 		
-		System.out.println("============== Department Insert ==========");
+		System.out.println("/n/n============== Department Update ==========/n/n");
 		
-		System.out.println(dep.getId());
+		departmentDao.update(dep);
+		
 		
 
 	}

@@ -62,7 +62,36 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void update(Department obj) {
-		// TODO Auto-generated method stub
+		//
+
+		PreparedStatement st = null;
+
+		try {
+
+			st = conn.prepareStatement("UPDATE Department SET Name=?  WHERE id = ?");
+
+			st.setString(1, obj.getName());
+			st.setInt(2, obj.getId());
+
+			int linhasAfetadas = st.executeUpdate();
+
+			if (linhasAfetadas > 0) {
+
+				System.out.println(" Registros afetados: " + linhasAfetadas);
+				System.out.println("Departamento Atualizado: " + obj.getId());
+
+			} else {System.out.println("Nenhuma linha atualizada !");
+			
+				System.out.println("Departamento Inexistente: " + obj.getId());
+			}
+		}
+
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+
+		} finally {
+			DB.closeStatemant(st);
+		}
 
 	}
 
