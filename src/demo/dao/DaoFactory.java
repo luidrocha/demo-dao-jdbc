@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import db.DB;
 import db.DbException;
+import demo.dao.impl.DepartmentDaoJDBC;
 import demo.dao.impl.SellerDaoJDBC;
 
 public class DaoFactory {
@@ -17,6 +18,18 @@ public class DaoFactory {
 			throw new DbException(e.getMessage());
 		}
 
+	}
+	
+	public static DepartmentDao createDepartmentDao() {
+		
+		
+		try {
+			return new DepartmentDaoJDBC(DB.getConnection());
+		}
+		catch (SQLException e) {
+			
+			throw new DbException (e.getMessage());
+		}
 	}
 
 }
