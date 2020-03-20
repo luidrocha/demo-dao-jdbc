@@ -49,6 +49,18 @@ public class Program2 {
 			
 		}
 		
+		System.out.println("/n/n============== Department FindAll ==========/n/n");
+		
+		List<Department> lista = new ArrayList<>();
+		
+		lista = departmentDao.findAll();
+		
+		for (Department dp: lista) {
+			
+			System.out.println(dp);
+			
+		}
+		
 	}
 
 }
