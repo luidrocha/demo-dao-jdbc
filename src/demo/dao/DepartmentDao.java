@@ -1,5 +1,6 @@
 package demo.dao;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 import model.entities.Department;
@@ -15,5 +16,7 @@ public interface DepartmentDao {
 	Department findById(Integer id);
 
 	List<Department> findAll();
+	
+	
 
 }

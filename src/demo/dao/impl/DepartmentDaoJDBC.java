@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
@@ -80,8 +81,9 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 				System.out.println(" Registros afetados: " + linhasAfetadas);
 				System.out.println("Departamento Atualizado: " + obj.getId());
 
-			} else {System.out.println("Nenhuma linha atualizada !");
-			
+			} else {
+				System.out.println("Nenhuma linha atualizada !");
+
 				System.out.println("Departamento Inexistente: " + obj.getId());
 			}
 		}
@@ -98,7 +100,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	@Override
 	public void deleteById(Integer id) {
 		//
-		
+
 		PreparedStatement st = null;
 
 		try {
@@ -112,10 +114,11 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 			if (linhasAfetadas > 0) {
 
 				System.out.println(" Registros afetados: " + linhasAfetadas);
-				System.out.println("Departamento Eliminado: " + id );
+				System.out.println("Departamento Eliminado: " + id);
 
-			} else {System.out.println("Nenhuma linha atualizada !");
-			
+			} else {
+				System.out.println("Nenhuma linha atualizada !");
+
 				System.out.println("Departamento Inexistente: " + id);
 			}
 		}
@@ -129,18 +132,59 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	}
 
-	
-
 	@Override
 	public Department findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		//
+
+		PreparedStatement st = null;
+
+		ResultSet rs = null;
+
+		try {
+
+			st = conn.prepareStatement("SELECT department.* FROM Department WHERE id=?");
+			
+			st.setInt(1,id);
+
+			rs = st.executeQuery();
+
+			Department dep = null;
+			
+			if (rs.next()) {
+
+				 dep = InstantiateDep(rs);
+				
+			
+			}
+			
+			return dep;
+
+		} catch (SQLException e) {
+
+			throw new DbException(e.getMessage());
+		} finally {
+
+			DB.closeStatemant(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
 	public List<Department> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	// Metodo auxiliar para instanciar Departamento
+	
+	private Department InstantiateDep (ResultSet rs)  throws SQLException {
+
+		Department dep = new Department();
+
+		dep.setId(rs.getInt(1));
+		dep.setName(rs.getString(2));
+		
+		return dep;
 	}
 
 }
